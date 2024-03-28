@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const thoughtSchema = require('./Thought');
+const reactionSchema = require('./Reaction');
 
 
 /*
@@ -36,7 +36,7 @@ const thoughtSchema = new Schema(
 
     createdAt: {
         type: Date,
-      required: true,
+        required: true,
         default: Date.now,
         get: (timestamp) => dateFormat(timestamp),
 
@@ -45,12 +45,13 @@ const thoughtSchema = new Schema(
         type: String,
         required: true,
         max_length: 20,
-        },
+        trim: true
+    },
 
     // nesting schema
     // aka subdocuments
     // reactions: [{reactionText:"..", username:".."}, {reactionText:"..", username:".."}],
-    thoughts: [thoughtSchema]
+    reactions: [reactionSchema]
     // reactions: [
     //   {
     //     type: Schema.Types.ObjectId,
@@ -60,10 +61,15 @@ const thoughtSchema = new Schema(
   },
   {
     toJSON: {
+      virtual: true,
       getters: true,
     },
   }
 );
+
+thoughtSchema.virtual('reactionCount').get(function() {
+  return this.reactions.length
+});
 
 const Thought = model('thought', thoughtSchema);
 

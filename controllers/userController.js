@@ -9,7 +9,6 @@ const getAllUsers = async (req, res) => {
       console.log(err);
       return res.status(500).json(err);
     }
-  res.json({});
 };
 
 const getUser = async (req, res) => {
@@ -20,7 +19,6 @@ const getUser = async (req, res) => {
       console.log(err);
       return res.status(500).json(err);
     }
-  res.json({});
 } // getUser end
 
 const createUser = async (req, res) => {
@@ -36,6 +34,32 @@ const createUser = async (req, res) => {
     return res.status(500).json(err);
   }
 } // createUser end
+
+const createFriend = async (req, res) => {
+  const userID = req.params.userID
+  const friendID = req.params.friendID
+
+  // find the user by id, which is a findOneAndUpdate operation
+  // add the friend id to the user's friends array field, which is a $push operation
+
+  try {
+    const newUserData = await User.findOneAndUpdate(
+      {
+        _id: userID
+      },
+      {
+        $push: {
+          friends: friendID
+        }
+      },
+      { new: true}
+    );
+    res.json(newUserData);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+} // createFriend end
 
 const updateUser = async (req, res) => {
   try {
@@ -71,10 +95,38 @@ const deleteUser = async (req, res) => {
   }
  } // deleteUser end
 
+ const deleteFriend = async (req, res) => {
+  const userID = req.params.userID
+  const friendID = req.params.friendID
+
+  // find the user by id, which is a findOneAndUpdate operation
+  // add the friend id to the user's friends array field, which is a $push operation
+
+  try {
+    const newUserData = await User.findOneAndUpdate(
+      {
+        _id: userID
+      },
+      {
+        $pull: {
+          friends: friendID
+        }
+      },
+      { new: true}
+    );
+    res.json(newUserData);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+} // deleteFriend end
+
 module.exports = {
   getAllUsers,
   getUser,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,  
+  createFriend,
+  deleteFriend
 };

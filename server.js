@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const db = require('./config/connection');
-const { User } = require('./models');
+//const { User } = require('./models');
 
 const routes = require("./routes")
 

@@ -1,5 +1,4 @@
 const { Schema, Types, model } = require('mongoose');
-const reactionSchema = require('./Reaction');
 
 
 function dateFormat(timestamp) {
@@ -41,6 +40,7 @@ const reactionSchema = new Schema(
     _id: false
   }
 );
+
 
 
 
